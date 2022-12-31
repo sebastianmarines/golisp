@@ -3,6 +3,7 @@ package reader
 import (
 	"cheemscript/ast"
 	"cheemscript/lexer"
+	"strconv"
 )
 
 type Reader struct {
@@ -79,9 +80,13 @@ func (r *Reader) readString() *ast.Node {
 }
 
 func (r *Reader) readNumber() *ast.Node {
+	i, err := strconv.Atoi(r.token)
+	if err != nil {
+		panic(err)
+	}
 	return &ast.Node{
 		Type:  ast.Number,
-		Value: r.token,
+		Value: i,
 	}
 }
 

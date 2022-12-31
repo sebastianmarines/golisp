@@ -17,7 +17,8 @@ func TestReader(t *testing.T) {
 		{"(a)", &ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "a"}}}},
 		{"(a b)", &ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "a"}, {Type: ast.Symbol, Value: "b"}}}},
 		{"(\"a\")", &ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.String, Value: "a"}}}},
-		{"((34))", &ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.List, Children: []*ast.Node{{Type: ast.Number, Value: "34"}}}}}},
+		{"((34))", &ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.List, Children: []*ast.Node{{Type: ast.Number, Value: 34}}}}}},
+		{"-34", &ast.Node{Type: ast.Number, Value: -34}},
 	}
 
 	for _, test := range tests {
