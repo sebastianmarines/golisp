@@ -2,11 +2,11 @@ package reader
 
 import (
 	"cheemscript/ast"
-	"cheemscript/tokenize"
+	"cheemscript/lexer"
 )
 
 type Reader struct {
-	tokens []tokenize.Token
+	tokens []lexer.Token
 
 	// The index of the next token to be read.
 	index int
@@ -15,10 +15,10 @@ type Reader struct {
 	token string
 
 	// The current token's type.
-	tokenType string
+	tokenType lexer.TokenType
 }
 
-func NewReader(tokens []tokenize.Token) *Reader {
+func NewReader(tokens []lexer.Token) *Reader {
 	return &Reader{
 		tokens: tokens,
 		index:  0,
@@ -37,12 +37,15 @@ func (r *Reader) Peek() string {
 
 func (r *Reader) read() *ast.Node {
 	switch r.tokenType {
-	case "symbol":
+	case lexer.Symbol:
 		return r.readSymbol()
-	case "(":
+	case lexer.LeftParen:
 		return r.readList()
-	case "string":
+	case lexer.String:
 		return r.readString()
+	case lexer.Integer:
+		return r.readNumber()
+
 	default:
 		panic("unknown token type")
 	}
@@ -75,12 +78,19 @@ func (r *Reader) readString() *ast.Node {
 	}
 }
 
+func (r *Reader) readNumber() *ast.Node {
+	return &ast.Node{
+		Type:  ast.Number,
+		Value: r.token,
+	}
+}
+
 func (r *Reader) Read() *ast.Node {
 	r.Next()
 	return r.read()
 }
 
 func Read(s string) *ast.Node {
-	tokens := tokenize.Tokenize(s)
+	tokens := lexer.Tokenize(s)
 	return NewReader(tokens).Read()
 }
