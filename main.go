@@ -1,9 +1,9 @@
 package main
 
 import (
-	"cheemscript/reader"
 	"fmt"
 	"github.com/chzyer/readline"
+	"golisp/reader"
 )
 
 func Eval(ast string) string {

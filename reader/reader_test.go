@@ -1,10 +1,10 @@
 package reader
 
 import (
-	"cheemscript/ast"
+	"golisp/ast"
 	"testing"
 )
-import "cheemscript/lexer"
+import "golisp/lexer"
 
 // This test should traverse the AST
 func TestReader(t *testing.T) {

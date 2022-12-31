@@ -1,8 +1,8 @@
 package reader
 
 import (
-	"cheemscript/ast"
-	"cheemscript/lexer"
+	"golisp/ast"
+	"golisp/lexer"
 	"strconv"
 )
 

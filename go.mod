@@ -1,4 +1,4 @@
-module cheemscript
+module golisp
 
 go 1.19
 
