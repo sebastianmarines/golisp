@@ -1,13 +1,10 @@
 package main
 
 import (
+	"cheemscript/reader"
 	"fmt"
 	"github.com/chzyer/readline"
 )
-
-func Read(str string) string {
-	return str
-}
 
 func Eval(ast string) string {
 	return ast
@@ -18,7 +15,8 @@ func Print(str string) string {
 }
 
 func Rep(str string) string {
-	return Print(Eval(Read(str)))
+	newReader := reader.Read(str)
+	return Print(Eval(newReader.String()))
 }
 
 func main() {
@@ -26,7 +24,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer rl.Close()
+	defer func(rl *readline.Instance) {
+		err := rl.Close()
+		if err != nil {
+
+		}
+	}(rl)
 
 	for {
 		line, err := rl.Readline()
