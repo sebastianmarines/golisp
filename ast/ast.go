@@ -1,5 +1,7 @@
 package ast
 
+import "strconv"
+
 type NodeType int
 
 const (
@@ -8,6 +10,7 @@ const (
 	Symbol
 	Number
 	String
+	Function
 )
 
 type Node struct {
@@ -43,7 +46,8 @@ func (n *Node) listString() string {
 }
 
 func (n *Node) numberString() string {
-	return n.Value.(string)
+	t := strconv.Itoa(n.Value.(int))
+	return t
 }
 
 func (n *Node) stringString() string {
