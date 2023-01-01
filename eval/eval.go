@@ -64,6 +64,10 @@ func evalFunction(astNode *ast.Node, env *Env) *ast.Node {
 		return f.Value.(func(ast.Node, ast.Node, *Env) *ast.Node)(*astNode.Children[1], *astNode.Children[2], env)
 	}
 
+	if first.Value == "let*" {
+		return f.Value.(func(*Env, ast.Node, *ast.Node) *ast.Node)(env, *astNode.Children[1], astNode.Children[2])
+	}
+
 	var values []interface{}
 	for _, child := range astNode.Children[1:] {
 		child = evalAst(child, env)

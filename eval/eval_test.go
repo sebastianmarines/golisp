@@ -22,6 +22,7 @@ func TestEval(t *testing.T) {
 		{input: ast.Node{Type: ast.Symbol, Value: "a"}, expected: "123"},
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "def!"}, {Type: ast.Symbol, Value: "a"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}}}, expected: "3"},
 		{input: ast.Node{Type: ast.Symbol, Value: "a"}, expected: "3"},
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "let*"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "a"}, {Type: ast.Number, Value: 123}}}, {Type: ast.Symbol, Value: "a"}}}, expected: "123"},
 	}
 
 	for _, test := range tests {
