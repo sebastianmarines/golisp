@@ -16,6 +16,9 @@ func TestNode_String(t *testing.T) {
 		{Node{List, nil, []*Node{{String, "a", []*Node{}}}}, "(\"a\")"},
 		{Node{List, nil, []*Node{{List, nil, []*Node{{Symbol, "34", []*Node{}}}}}}, "((34))"},
 		{Node{Number, 34, []*Node{}}, "34"},
+		{Node{Nil, nil, []*Node{}}, "nil"},
+		{Node{True, true, []*Node{}}, "true"},
+		{Node{False, false, []*Node{}}, "false"},
 	}
 
 	for _, test := range tests {

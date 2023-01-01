@@ -11,6 +11,9 @@ const (
 	Number
 	String
 	InternalFunction
+	Nil
+	True
+	False
 )
 
 type Node struct {
@@ -29,6 +32,12 @@ func (n *Node) String() string {
 		return n.stringString()
 	case Symbol:
 		return n.symbolString()
+	case Nil:
+		return "nil"
+	case True:
+		return "true"
+	case False:
+		return "false"
 	default:
 		panic("unknown node type")
 	}

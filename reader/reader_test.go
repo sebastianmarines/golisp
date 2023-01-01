@@ -19,6 +19,9 @@ func TestReader(t *testing.T) {
 		{"(\"a\")", &ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.String, Value: "a"}}}},
 		{"((34))", &ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.List, Children: []*ast.Node{{Type: ast.Number, Value: 34}}}}}},
 		{"-34", &ast.Node{Type: ast.Number, Value: -34}},
+		{"nil", &ast.Node{Type: ast.Nil, Value: nil}},
+		{"true", &ast.Node{Type: ast.True, Value: true}},
+		{"false", &ast.Node{Type: ast.False, Value: false}},
 	}
 
 	for _, test := range tests {

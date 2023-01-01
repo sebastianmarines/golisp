@@ -53,9 +53,28 @@ func (r *Reader) read() *ast.Node {
 }
 
 func (r *Reader) readSymbol() *ast.Node {
-	return &ast.Node{
-		Type:  ast.Symbol,
-		Value: r.token,
+	switch r.token {
+	case "nil":
+		return &ast.Node{
+			Type:  ast.Nil,
+			Value: nil,
+		}
+	case "true":
+		return &ast.Node{
+			Type:  ast.True,
+			Value: true,
+		}
+	case "false":
+		return &ast.Node{
+			Type:  ast.False,
+			Value: false,
+		}
+	default:
+		return &ast.Node{
+			Type:  ast.Symbol,
+			Value: r.token,
+		}
+
 	}
 }
 
