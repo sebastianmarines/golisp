@@ -10,7 +10,7 @@ const (
 	Symbol
 	Number
 	String
-	Function
+	InternalFunction
 )
 
 type Node struct {

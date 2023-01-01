@@ -9,12 +9,12 @@ type Env struct {
 
 func NewEnv(outer *Env) *Env {
 	env := &Env{outer: outer, store: make(map[string]ast.Node)}
-	env.Set("+", ast.Node{Type: ast.Function, Value: plus})
-	env.Set("-", ast.Node{Type: ast.Function, Value: minus})
-	env.Set("*", ast.Node{Type: ast.Function, Value: multiply})
-	env.Set("/", ast.Node{Type: ast.Function, Value: divide})
-	env.Set("def!", ast.Node{Type: ast.Function, Value: define})
-	env.Set("let*", ast.Node{Type: ast.Function, Value: let})
+	env.Set("+", ast.Node{Type: ast.InternalFunction, Value: plus})
+	env.Set("-", ast.Node{Type: ast.InternalFunction, Value: minus})
+	env.Set("*", ast.Node{Type: ast.InternalFunction, Value: multiply})
+	env.Set("/", ast.Node{Type: ast.InternalFunction, Value: divide})
+	env.Set("def!", ast.Node{Type: ast.InternalFunction, Value: define})
+	env.Set("let*", ast.Node{Type: ast.InternalFunction, Value: let})
 	return env
 }
 

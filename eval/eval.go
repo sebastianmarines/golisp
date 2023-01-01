@@ -35,7 +35,7 @@ func evalList(astNode *ast.Node, env *Env) *ast.Node {
 		if !ok {
 			panic("undefined symbol")
 		}
-		if i.Type == ast.Function {
+		if i.Type == ast.InternalFunction {
 			return evalFunction(astNode, env)
 		}
 	}
@@ -56,7 +56,7 @@ func evalFunction(astNode *ast.Node, env *Env) *ast.Node {
 	if !ok {
 		panic("undefined symbol")
 	}
-	if f.Type != ast.Function {
+	if f.Type != ast.InternalFunction {
 		panic("not a function")
 	}
 
