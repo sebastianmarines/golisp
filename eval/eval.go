@@ -3,7 +3,7 @@ package eval
 import "golisp/ast"
 
 func Eval(astNode *ast.Node, env *Env) string {
-	return evalAst(astNode, env).String()
+	return evalAst(astNode, env).PrStr()
 }
 
 func evalAst(astNode *ast.Node, env *Env) *ast.Node {

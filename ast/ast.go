@@ -22,7 +22,7 @@ type Node struct {
 	Children []*Node
 }
 
-func (n *Node) String() string {
+func (n *Node) PrStr() string {
 	switch n.Type {
 	case List:
 		return n.listString()
@@ -49,7 +49,7 @@ func (n *Node) listString() string {
 		return "()"
 	}
 	for _, child := range n.Children {
-		str += child.String() + " "
+		str += child.PrStr() + " "
 	}
 	return "(" + str[:len(str)-1] + ")"
 }

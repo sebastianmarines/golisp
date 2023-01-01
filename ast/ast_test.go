@@ -27,7 +27,7 @@ func TestNode_String(t *testing.T) {
 }
 
 func testString(t *testing.T, ast Node, expected string) {
-	if current := ast.String(); current != expected {
+	if current := ast.PrStr(); current != expected {
 		t.Errorf("expected %v, got %v", expected, current)
 	}
 }
