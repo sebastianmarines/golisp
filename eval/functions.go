@@ -68,10 +68,10 @@ func define(name ast.Node, value ast.Node, env *Env) *ast.Node {
 	return newValue
 }
 
-func let(outer *Env, values ast.Node, rest *ast.Node) *ast.Node {
+func let(values ast.Node, rest ast.Node, outer *Env) *ast.Node {
 	env := NewEnv(outer)
 	for i := 0; i < len(values.Children); i += 2 {
 		env.Set(values.Children[i].Value.(string), *evalAst(values.Children[i+1], env))
 	}
-	return evalAst(rest, env)
+	return evalAst(&rest, env)
 }
