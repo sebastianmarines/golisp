@@ -15,6 +15,7 @@ func NewEnv(outer *Env) *Env {
 	env.Set("/", ast.Node{Type: ast.InternalFunction, Value: divide})
 	env.Set("def!", ast.Node{Type: ast.InternalFunction, Value: define})
 	env.Set("let*", ast.Node{Type: ast.InternalFunction, Value: let})
+	env.Set("do", ast.Node{Type: ast.InternalFunction, Value: do})
 	return env
 }
 

@@ -75,3 +75,11 @@ func let(values ast.Node, rest ast.Node, outer *Env) *ast.Node {
 	}
 	return evalAst(&rest, env)
 }
+
+func do(outer *Env, rest ...*ast.Node) *ast.Node {
+	var result *ast.Node
+	for _, node := range rest {
+		result = evalAst(node, outer)
+	}
+	return result
+}
