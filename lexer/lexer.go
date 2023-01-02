@@ -151,7 +151,12 @@ func (l *Lexer) readSymbol() string {
 }
 
 func (l *Lexer) skipWhitespace() {
-	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' || l.ch == ';' {
+		if l.ch == ';' {
+			for l.ch != '\n' && l.ch != 0 {
+				l.readChar()
+			}
+		}
 		l.readChar()
 	}
 }
