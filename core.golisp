@@ -1,1 +1,16 @@
+; GoLisp core library
+; Copyright (c) 2023 Sebastian Marines
+;         ,_---~~~~~----._         
+;  _,,_,*^____      _____``*g*\"*, 
+; / __/ /'     ^.  /      \ ^@q   f 
+;[  @f | @))    |  | @))   l  0 _/  
+; \`/   \~____ / __ \_____/    \   
+;  |           _l__l_           I   
+;  }          [______]           I  
+;  ]            | | |            |  
+;  ]             ~ ~             |  
+;  |                            |   
+;   |                           |   
+
 (def! not (fn* (a) (if a false true)))
+(def! empty? (fn* (coll) (= coll nil)))
