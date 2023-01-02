@@ -11,7 +11,7 @@
   <h1 align="center">GoLisp</h1>
 
   <p align="center">
-    A Lisp-like programming general-purpose, dynamically-typed, and interpreted language.
+    A Lisp-like general-purpose, dynamically-typed, and interpreted language.
   </p>
 </div>
 
