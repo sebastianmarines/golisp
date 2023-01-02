@@ -1,0 +1,2 @@
+(def! greet (fn* (name) (prn (+ "Hello " name))))
+(greet "Sebastian")
