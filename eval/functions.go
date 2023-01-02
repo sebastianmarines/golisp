@@ -157,3 +157,26 @@ func greaterThan(outer *Env, values ...*ast.Node) *ast.Node {
 	}
 	return &ast.Node{Type: ast.True}
 }
+
+func lessThan(outer *Env, values ...*ast.Node) *ast.Node {
+	first := evalAst(values[0], outer)
+	for _, value := range values[1:] {
+		second := evalAst(value, outer)
+		if first.Type != second.Type {
+			panic("invalid type")
+		}
+		switch first.Type {
+		case ast.Number:
+			if first.Value.(int) >= second.Value.(int) {
+				return &ast.Node{Type: ast.False}
+			}
+		case ast.String:
+			if first.Value.(string) >= second.Value.(string) {
+				return &ast.Node{Type: ast.False}
+			}
+		default:
+			panic("invalid type")
+		}
+	}
+	return &ast.Node{Type: ast.True}
+}

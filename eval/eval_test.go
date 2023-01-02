@@ -96,6 +96,17 @@ func TestComparison(t *testing.T) {
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: ">"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}, {Type: ast.Number, Value: 2}}}, expected: "false"},
 		// (> (+ 1 1) 1) => true
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: ">"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}, {Type: ast.Number, Value: 1}}}, expected: "true"},
+
+		// (< 1 1) => false
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "<"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}, expected: "false"},
+		// (< 1 2) => true
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "<"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}, expected: "true"},
+		// (< 2 1) => false
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "<"}, {Type: ast.Number, Value: 2}, {Type: ast.Number, Value: 1}}}, expected: "false"},
+		// (< (+ 1 1) 2) => false
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "<"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}, {Type: ast.Number, Value: 2}}}, expected: "false"},
+		// (< (+ 1 1) 1) => false
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "<"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}, {Type: ast.Number, Value: 1}}}, expected: "false"},
 	}
 
 	for _, test := range tests {

@@ -19,6 +19,7 @@ func NewEnv(outer *Env) *Env {
 	env.Set("prn", ast.Node{Type: ast.InternalFunction, Value: prn})
 	env.Set("=", ast.Node{Type: ast.InternalFunction, Value: equals})
 	env.Set(">", ast.Node{Type: ast.InternalFunction, Value: greaterThan})
+	env.Set("<", ast.Node{Type: ast.InternalFunction, Value: lessThan})
 	return env
 }
 
