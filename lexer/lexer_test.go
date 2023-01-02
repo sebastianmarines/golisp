@@ -19,6 +19,7 @@ func TestTokenize(t *testing.T) {
 		{"(123)", []Token{{LeftParen, "("}, {Integer, "123"}, {RightParen, ")"}}},
 		{"-123", []Token{{Integer, "-123"}}},
 		{"\"hello \nworld\"", []Token{{String, "hello \nworld"}}},
+		{"(- 2 1)", []Token{{LeftParen, "("}, {Symbol, "-"}, {Integer, "2"}, {Integer, "1"}, {RightParen, ")"}}},
 	}
 
 	for _, test := range tests {

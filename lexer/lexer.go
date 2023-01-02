@@ -79,6 +79,10 @@ func (l *Lexer) NextToken() Token {
 					tok.Type = Integer
 					tok.Value = "-" + l.readNumber()
 					return tok
+				} else {
+					tok.Type = Symbol
+					tok.Value = l.readSymbol()
+					return tok
 				}
 			} else {
 				tok.Type = Symbol
