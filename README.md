@@ -15,6 +15,17 @@
   </p>
 </div>
 
+# Example
+
+```lisp
+(def! fib
+    (fn* (n)
+        (if (< n 2)
+            n
+            (+ (fib (- n 1)) (fib (- n 2))))))
+
+(prn (fib 10))
+```
 
 # Contributing
 We welcome contributions to GoLisp! If you have an idea for a new feature or have found a bug, please open an issue. To submit a change, fork the repository and create a pull request with your changes.
