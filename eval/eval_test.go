@@ -67,6 +67,31 @@ func TestInternalFunctions(t *testing.T) {
 	}
 }
 
+func TestComparison(t *testing.T) {
+	env := NewEnv(nil)
+	tests := []struct {
+		input    ast.Node
+		expected string
+	}{
+		// (= 1 1) => true
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "="}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}, expected: "true"},
+		// (= 1 2) => false
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "="}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}, expected: "false"},
+		// (= (1 1) (1 1)) => true
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "="}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}}}, expected: "true"},
+		// (= (1 1) (1 2)) => false
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "="}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}}}, expected: "false"},
+		// (= (+ 1 1) 2) => true
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "="}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}, {Type: ast.Number, Value: 2}}}, expected: "true"},
+		// (= (+ 1 1) 3) => false
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "="}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}, {Type: ast.Number, Value: 3}}}, expected: "false"},
+	}
+
+	for _, test := range tests {
+		testEval(t, env, test.input, test.expected)
+	}
+}
+
 func TestPrn(t *testing.T) {
 	rescueStdout := readline.Stdout
 	r, w, _ := os.Pipe()

@@ -102,10 +102,34 @@ func prn(outer *Env, nodes ...*ast.Node) *ast.Node {
 func equals(outer *Env, values ...*ast.Node) *ast.Node {
 	first := evalAst(values[0], outer)
 	for _, value := range values[1:] {
-		// eval the nodes
 		second := evalAst(value, outer)
 		if first.Type != second.Type {
 			return &ast.Node{Type: ast.False}
+		}
+		switch first.Type {
+		case ast.Number:
+			if first.Value.(int) != second.Value.(int) {
+				return &ast.Node{Type: ast.False}
+			}
+		case ast.String:
+			if first.Value.(string) != second.Value.(string) {
+				return &ast.Node{Type: ast.False}
+			}
+		case ast.Nil:
+			if first.Value != second.Value {
+				return &ast.Node{Type: ast.False}
+			}
+		case ast.List:
+			if len(first.Children) != len(second.Children) {
+				return &ast.Node{Type: ast.False}
+			}
+			for i := 0; i < len(first.Children); i++ {
+				if first.Children[i].Value != second.Children[i].Value {
+					return &ast.Node{Type: ast.False}
+				}
+			}
+		default:
+			panic("invalid type")
 		}
 	}
 	return &ast.Node{Type: ast.True}
