@@ -17,6 +17,7 @@ const (
 	Nil
 	True
 	False
+	Function
 )
 
 type Node struct {
@@ -41,6 +42,8 @@ func (n *Node) PrStr(printReadability bool) string {
 		return "true"
 	case False:
 		return "false"
+	case Function:
+		return "#<function>"
 	default:
 		panic("unknown node type")
 	}

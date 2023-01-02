@@ -30,15 +30,30 @@ func evalList(astNode *ast.Node, env *Env) *ast.Node {
 		return astNode
 	}
 	first := astNode.Children[0]
-	if first.Type == ast.Symbol {
+
+	if first.Type == ast.List {
+		first = evalAst(first, env)
+	}
+
+	if first.Type == ast.Symbol && first.Value == "fn*" {
+		return evalFunction(astNode, env)
+	} else if first.Type == ast.Symbol {
 		i, ok := env.Get(first.Value.(string))
 		if !ok {
 			panic("undefined symbol")
 		}
 		if i.Type == ast.InternalFunction {
-			return evalFunction(astNode, env)
+			return evalInternalFunction(astNode, env)
 		}
+	} else if first.Type == ast.Function {
+		var values []ast.Node
+		for _, child := range astNode.Children[1:] {
+			child = evalAst(child, env)
+			values = append(values, *child)
+		}
+		return first.Value.(func(...ast.Node) *ast.Node)(values...)
 	}
+
 	return evalListChildren(astNode, env)
 }
 
@@ -51,6 +66,17 @@ func evalListChildren(astNode *ast.Node, env *Env) *ast.Node {
 }
 
 func evalFunction(astNode *ast.Node, env *Env) *ast.Node {
+	funcClosure := func(args ...ast.Node) *ast.Node {
+		var newEnv = NewEnv(env)
+		for i, param := range astNode.Children[1].Children {
+			newEnv.Set(param.Value.(string), args[i])
+		}
+		return evalAst(astNode.Children[2], newEnv)
+	}
+	return &ast.Node{Type: ast.Function, Value: funcClosure}
+}
+
+func evalInternalFunction(astNode *ast.Node, env *Env) *ast.Node {
 	first := astNode.Children[0]
 	f, ok := env.Get(first.Value.(string))
 	if !ok {
