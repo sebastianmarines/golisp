@@ -175,6 +175,11 @@ func TestFunctions(t *testing.T) {
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "fn*"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "a"}}}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Symbol, Value: "a"}, {Type: ast.Number, Value: 1}}}}}, {Type: ast.Number, Value: 1}}}, expected: "2"},
 		// ((fn* (a b) (+ a b)) 1 2) => 3
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "fn*"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "a"}, {Type: ast.Symbol, Value: "b"}}}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Symbol, Value: "a"}, {Type: ast.Symbol, Value: "b"}}}}}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}, expected: "3"},
+
+		// (def! add (fn* (a b) (+ a b))) => #<function>
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "def!"}, {Type: ast.Symbol, Value: "add"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "fn*"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "a"}, {Type: ast.Symbol, Value: "b"}}}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Symbol, Value: "a"}, {Type: ast.Symbol, Value: "b"}}}}}}}, expected: "#<function>"},
+		// (add 1 2) => 3
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "add"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}, expected: "3"},
 	}
 
 	for _, test := range tests {
