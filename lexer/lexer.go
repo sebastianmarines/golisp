@@ -106,8 +106,26 @@ func (l *Lexer) readString() string {
 	for {
 		l.readChar()
 		if l.ch == '\\' {
-			l.readChar()
-			str += string(l.ch)
+			switch l.peekChar() {
+			case '"':
+				str += "\""
+				l.readChar()
+			case 'n':
+				str += "\n"
+				l.readChar()
+			case 't':
+				str += "\t"
+				l.readChar()
+			case 'r':
+				str += "\r"
+				l.readChar()
+			case '\\':
+				str += "\\"
+				l.readChar()
+			default:
+				str += "\\"
+				l.readChar()
+			}
 			continue
 		}
 		if l.ch == '"' || l.ch == 0 {

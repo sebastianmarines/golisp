@@ -1,6 +1,9 @@
 package ast
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 type NodeType int
 
@@ -22,14 +25,14 @@ type Node struct {
 	Children []*Node
 }
 
-func (n *Node) PrStr() string {
+func (n *Node) PrStr(printReadability bool) string {
 	switch n.Type {
 	case List:
 		return n.listString()
 	case Number:
 		return n.numberString()
 	case String:
-		return n.stringString()
+		return n.stringString(printReadability)
 	case Symbol:
 		return n.symbolString()
 	case Nil:
@@ -49,7 +52,7 @@ func (n *Node) listString() string {
 		return "()"
 	}
 	for _, child := range n.Children {
-		str += child.PrStr() + " "
+		str += child.PrStr(false) + " "
 	}
 	return "(" + str[:len(str)-1] + ")"
 }
@@ -59,8 +62,14 @@ func (n *Node) numberString() string {
 	return t
 }
 
-func (n *Node) stringString() string {
-	return "\"" + n.Value.(string) + "\""
+func (n *Node) stringString(printReadability bool) string {
+	var str string
+	if printReadability {
+		str = fmt.Sprintf("%v", n.Value)
+	} else {
+		str = fmt.Sprintf("%q", n.Value)
+	}
+	return str
 }
 
 func (n *Node) symbolString() string {

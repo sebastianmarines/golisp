@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"github.com/chzyer/readline"
+	"golisp/ast"
 	"golisp/eval"
 	"golisp/reader"
 )
 
-func Print(str string) string {
-	return str
+func Print(n *ast.Node) string {
+	return n.PrStr(false)
 }
 
 func Rep(str string, env *eval.Env) string {
@@ -34,6 +35,11 @@ func main() {
 		if err != nil {
 			break
 		}
-		fmt.Println(Rep(line, env))
+		res := Rep(line, env)
+
+		_, err = fmt.Fprintln(rl.Stdout(), res)
+		if err != nil {
+			return
+		}
 	}
 }
