@@ -8,26 +8,57 @@ import (
 	"testing"
 )
 
-func TestEval(t *testing.T) {
+func TestArithmetic(t *testing.T) {
 	env := NewEnv(nil)
 	tests := []struct {
 		input    ast.Node
 		expected string
 	}{
+		// 123
 		{input: ast.Node{Type: ast.Number, Value: 123}, expected: "123"},
+		// (+ 1 2)
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}, expected: "3"},
+		// (+ 1 (+ 2 3))
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 1}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 2}, {Type: ast.Number, Value: 3}}}}}, expected: "6"},
+		// (+ "foo" "bar")
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.String, Value: "foo"}, {Type: ast.String, Value: "bar"}}}, expected: "\"foobar\""},
+		// (* 2 3)
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "*"}, {Type: ast.Number, Value: 2}, {Type: ast.Number, Value: 3}}}, expected: "6"},
+		// (/ 6 3)
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "/"}, {Type: ast.Number, Value: 6}, {Type: ast.Number, Value: 3}}}, expected: "2"},
+		// (- 6 3)
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "-"}, {Type: ast.Number, Value: 6}, {Type: ast.Number, Value: 3}}}, expected: "3"},
+	}
+
+	for _, test := range tests {
+		testEval(t, env, test.input, test.expected)
+	}
+}
+
+func TestInternalFunctions(t *testing.T) {
+	env := NewEnv(nil)
+	tests := []struct {
+		input    ast.Node
+		expected string
+	}{
+		// (def! a 123) => 123
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "def!"}, {Type: ast.Symbol, Value: "a"}, {Type: ast.Number, Value: 123}}}, expected: "123"},
 		{input: ast.Node{Type: ast.Symbol, Value: "a"}, expected: "123"},
-		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "def!"}, {Type: ast.Symbol, Value: "a"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}}}, expected: "3"},
-		{input: ast.Node{Type: ast.Symbol, Value: "a"}, expected: "3"},
+
+		// (def! b (+ 1 2)) => 3
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "def!"}, {Type: ast.Symbol, Value: "b"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}}}, expected: "3"},
+		{input: ast.Node{Type: ast.Symbol, Value: "b"}, expected: "3"},
+
+		// (let* (a 123) a) => 123
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "let*"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "a"}, {Type: ast.Number, Value: 123}}}, {Type: ast.Symbol, Value: "a"}}}, expected: "123"},
-		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "def!"}, {Type: ast.Symbol, Value: "a"}, {Type: ast.String, Value: "foo \n bar"}}}, expected: "\"foo \\n bar\""},
+
+		// (def! c "foo \n bar") => "foo \n bar"
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "def!"}, {Type: ast.Symbol, Value: "c"}, {Type: ast.String, Value: "foo \n bar"}}}, expected: "\"foo \\n bar\""},
+
+		// (do 1 2 3) => 3
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "do"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}, {Type: ast.Number, Value: 3}}}, expected: "3"},
+
+		// (do 1 2 (+ 1 2)) => 3
 		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "do"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "+"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}}}, expected: "3"},
 	}
 
@@ -59,6 +90,6 @@ func TestPrn(t *testing.T) {
 func testEval(t *testing.T, env *Env, input ast.Node, expected string) {
 	result := Eval(&input, env).PrStr(false)
 	if result != expected {
-		t.Errorf("expected %v, got %v", expected, result)
+		t.Errorf("[%v] expected %v, got %v", input.PrStr(false), expected, result)
 	}
 }

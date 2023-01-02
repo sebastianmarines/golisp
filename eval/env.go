@@ -17,6 +17,7 @@ func NewEnv(outer *Env) *Env {
 	env.Set("let*", ast.Node{Type: ast.InternalFunction, Value: let})
 	env.Set("do", ast.Node{Type: ast.InternalFunction, Value: do})
 	env.Set("prn", ast.Node{Type: ast.InternalFunction, Value: prn})
+	env.Set("=", ast.Node{Type: ast.InternalFunction, Value: equals})
 	return env
 }
 

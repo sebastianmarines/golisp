@@ -98,3 +98,15 @@ func prn(outer *Env, nodes ...*ast.Node) *ast.Node {
 	}
 	return &ast.Node{Type: ast.Nil}
 }
+
+func equals(outer *Env, values ...*ast.Node) *ast.Node {
+	first := evalAst(values[0], outer)
+	for _, value := range values[1:] {
+		// eval the nodes
+		second := evalAst(value, outer)
+		if first.Type != second.Type {
+			return &ast.Node{Type: ast.False}
+		}
+	}
+	return &ast.Node{Type: ast.True}
+}
