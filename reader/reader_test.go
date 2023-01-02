@@ -29,6 +29,55 @@ func TestReader(t *testing.T) {
 	}
 }
 
+func TestMultiline(t *testing.T) {
+	str := `
+		(+ 1 2)
+		(+ 3 4)
+		(+
+			5
+			6
+		)
+	`
+	tokens := lexer.Tokenize(str)
+	reader := NewReader(tokens)
+
+	node := reader.Read()
+
+	if node.Type != ast.List {
+		t.Errorf("expected list, got %v", node.Type)
+	}
+
+	if len(node.Children) != 3 {
+		t.Errorf("expected 3 children, got %v", len(node.Children))
+	}
+
+	node = reader.Read()
+
+	if node.Type != ast.List {
+		t.Errorf("expected list, got %v", node.Type)
+	}
+
+	if len(node.Children) != 3 {
+		t.Errorf("expected 3 children, got %v", len(node.Children))
+	}
+
+	node = reader.Read()
+
+	if node.Type != ast.List {
+		t.Errorf("expected list, got %v", node.Type)
+	}
+
+	if len(node.Children) != 3 {
+		t.Errorf("expected 3 children, got %v", len(node.Children))
+	}
+
+	node = reader.Read()
+
+	if node != nil {
+		t.Errorf("expected nil, got %v", node)
+	}
+}
+
 func testReader(t *testing.T, str string, expected *ast.Node) {
 	tokens := lexer.Tokenize(str)
 	reader := NewReader(tokens)

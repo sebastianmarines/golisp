@@ -12,6 +12,12 @@ type Reader struct {
 	// The index of the next token to be read.
 	index int
 
+	// The length of the tokens slice.
+	length int
+
+	end     bool
+	nextEnd bool
+
 	// The current token.
 	token string
 
@@ -21,15 +27,27 @@ type Reader struct {
 
 func NewReader(tokens []lexer.Token) *Reader {
 	return &Reader{
-		tokens: tokens,
-		index:  0,
+		tokens:  tokens,
+		index:   0,
+		length:  len(tokens),
+		end:     false,
+		nextEnd: false,
 	}
 }
 
 func (r *Reader) Next() {
+	if r.nextEnd {
+		r.end = true
+		return
+	}
+
 	r.token = r.tokens[r.index].Value
 	r.tokenType = r.tokens[r.index].Type
-	r.index++
+	if r.index+1 < r.length {
+		r.index++
+	} else {
+		r.nextEnd = true
+	}
 }
 
 func (r *Reader) Peek() string {
@@ -37,6 +55,10 @@ func (r *Reader) Peek() string {
 }
 
 func (r *Reader) read() *ast.Node {
+	if r.end {
+		return nil
+	}
+
 	switch r.tokenType {
 	case lexer.Symbol:
 		return r.readSymbol()
