@@ -1,7 +1,10 @@
 package eval
 
 import (
+	"github.com/chzyer/readline"
 	"golisp/ast"
+	"io"
+	"os"
 	"testing"
 )
 
@@ -30,6 +33,26 @@ func TestEval(t *testing.T) {
 
 	for _, test := range tests {
 		testEval(t, env, test.input, test.expected)
+	}
+}
+
+func TestPrn(t *testing.T) {
+	rescueStdout := readline.Stdout
+	r, w, _ := os.Pipe()
+	readline.Stdout = w
+
+	test := ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "prn"}, {Type: ast.String, Value: "Hello"}}}
+	Eval(&test, NewEnv(nil))
+
+	err := w.Close()
+	if err != nil {
+		return
+	}
+	out, _ := io.ReadAll(r)
+	readline.Stdout = rescueStdout
+
+	if string(out) != "Hello\n" {
+		t.Errorf("expected \"Hello\", got %q", string(out))
 	}
 }
 

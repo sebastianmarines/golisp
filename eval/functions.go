@@ -1,6 +1,10 @@
 package eval
 
-import "golisp/ast"
+import (
+	"fmt"
+	"github.com/chzyer/readline"
+	"golisp/ast"
+)
 
 func plus(values ...interface{}) interface{} {
 	result := values[0]
@@ -82,4 +86,15 @@ func do(outer *Env, rest ...*ast.Node) *ast.Node {
 		result = evalAst(node, outer)
 	}
 	return result
+}
+
+func prn(outer *Env, nodes ...*ast.Node) *ast.Node {
+	for _, n := range nodes {
+		result := evalAst(n, outer)
+		_, err := fmt.Fprintf(readline.Stdout, "%v\n", result.Value)
+		if err != nil {
+			panic(err)
+		}
+	}
+	return &ast.Node{Type: ast.Nil}
 }
