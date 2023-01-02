@@ -226,3 +226,17 @@ func lessThanOrEqual(outer *Env, values ...*ast.Node) *ast.Node {
 	}
 	return &ast.Node{Type: ast.True}
 }
+
+func ifElse(outer *Env, args ...*ast.Node) *ast.Node {
+	if len(args) < 2 {
+		panic("if requires at least 2 arguments")
+	}
+	cond := evalAst(args[0], outer)
+	if cond.Type == ast.Nil || cond.Type == ast.False {
+		if len(args) == 3 {
+			return evalAst(args[2], outer)
+		}
+		return &ast.Node{Type: ast.Nil}
+	}
+	return evalAst(args[1], outer)
+}

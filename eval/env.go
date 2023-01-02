@@ -22,6 +22,7 @@ func NewEnv(outer *Env) *Env {
 	env.Set("<", ast.Node{Type: ast.InternalFunction, Value: lessThan})
 	env.Set(">=", ast.Node{Type: ast.InternalFunction, Value: greaterThanOrEqual})
 	env.Set("<=", ast.Node{Type: ast.InternalFunction, Value: lessThanOrEqual})
+	env.Set("if", ast.Node{Type: ast.InternalFunction, Value: ifElse})
 	return env
 }
 

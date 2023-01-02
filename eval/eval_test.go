@@ -135,6 +135,32 @@ func TestComparison(t *testing.T) {
 	}
 }
 
+func TestEvalIf(t *testing.T) {
+	env := NewEnv(nil)
+	tests := []struct {
+		input    ast.Node
+		expected string
+	}{
+		// (if true 1 2) => 1
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "if"}, {Type: ast.True, Value: true}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}, expected: "1"},
+		// (if false 1 2) => 2
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "if"}, {Type: ast.False, Value: false}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}, expected: "2"},
+		// (if true 1) => 1
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "if"}, {Type: ast.True, Value: true}, {Type: ast.Number, Value: 1}}}, expected: "1"},
+		// (if false 1) => nil
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "if"}, {Type: ast.False, Value: false}, {Type: ast.Number, Value: 1}}}, expected: "nil"},
+
+		// (if (= 1 1) 1 2) => 1
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "if"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "="}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}, expected: "1"},
+		// (if (> 1 1) 1 2) => 2
+		{input: ast.Node{Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: "if"}, {Type: ast.List, Children: []*ast.Node{{Type: ast.Symbol, Value: ">"}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 1}}}, {Type: ast.Number, Value: 1}, {Type: ast.Number, Value: 2}}}, expected: "2"},
+	}
+
+	for _, test := range tests {
+		testEval(t, env, test.input, test.expected)
+	}
+}
+
 func TestPrn(t *testing.T) {
 	rescueStdout := readline.Stdout
 	r, w, _ := os.Pipe()
