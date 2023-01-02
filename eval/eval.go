@@ -72,7 +72,7 @@ func evalFunction(astNode *ast.Node, env *Env) *ast.Node {
 		return f.Value.(func(*Env, ...*ast.Node) *ast.Node)(env, astNode.Children[1:]...)
 	}
 
-	if first.Value == "=" || first.Value == ">" || first.Value == "<" {
+	if first.Value == "=" || first.Value == ">" || first.Value == "<" || first.Value == ">=" || first.Value == "<=" {
 		return f.Value.(func(*Env, ...*ast.Node) *ast.Node)(env, astNode.Children[1:]...)
 	}
 
