@@ -1,4 +1,6 @@
 [![codecov](https://codecov.io/gh/sebastianmarines/golisp/branch/main/graph/badge.svg?token=R46AK463XS)](https://codecov.io/gh/sebastianmarines/golisp)
+[![Test and coverage](https://github.com/sebastianmarines/golisp/actions/workflows/main.yml/badge.svg)](https://github.com/sebastianmarines/golisp/actions/workflows/main.yml)
+[![Release](https://github.com/sebastianmarines/golisp/actions/workflows/release.yml/badge.svg)](https://github.com/sebastianmarines/golisp/actions/workflows/release.yml)
 
 ---
 
